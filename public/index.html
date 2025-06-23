@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Event Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <img src="vml.png" alt="VML Logo" class="logo">
+                <h1>Analytics Event Generator</h1>
+            </div>
+            <div class="header-right">
+                <a href="/logout" class="btn secondary logout-btn">Logout</a>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab-button active" data-tab="experience">XTND Experience Events</button>
+            <button class="tab-button" data-tab="ecommerce">XTND E-commerce Events</button>
+            <button class="tab-button" data-tab="datalayer">Data Layer Builder</button>
+        </div>
+        
+        <div class="main-content">
+            <div class="left-panel">
+                <!-- Experience Events Form -->
+                <div class="card tab-content active" id="experienceForm">
+                    <h2>Experience Event Details</h2>
+                    <form id="eventForm">
+                        <div class="form-group">
+                            <label for="imageUpload">Upload Image (Optional)</label>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </div>
+
+                        <div class="form-group" style="display: none;">
+                            <label for="event">Event *</label>
+                            <input type="text" id="event" value="experience_event" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <button id="settingsBtn" class="btn secondary" type="button">Settings</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="screenName">Screen Name *</label>
+                            <input type="text" id="screenName" required placeholder="e.g., home, product-detail, checkout">
+                            <span class="error" id="screenNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventAction">Event Action *</label>
+                            <div id="customEventActionDropdown" class="custom-dropdown">
+                                <div class="dropdown-selected" id="dropdownSelected">Select action</div>
+                                <div class="dropdown-list" id="dropdownList" style="display:none;">
+                                    <div class="dropdown-columns">
+                                        <div class="dropdown-column">
+                                            <div class="dropdown-group-header">Application Triggered<br><span class="dropdown-group-sub">(app_progress)</span></div>
+                                            <div class="dropdown-option" data-value="view">view</div>
+                                        </div>
+                                        <div class="dropdown-column">
+                                            <div class="dropdown-group-header">User Triggered<br><span class="dropdown-group-sub">(user_action)</span></div>
+                                            <div class="dropdown-user-columns">
+                                                <div class="dropdown-user-col">
+                                                    <div class="dropdown-option" data-value="click">click</div>
+                                                    <div class="dropdown-option" data-value="scan">scan</div>
+                                                    <div class="dropdown-option" data-value="play">play</div>
+                                                    <div class="dropdown-option" data-value="submit">submit</div>
+                                                    <div class="dropdown-option" data-value="download">download</div>
+                                                </div>
+                                                <div class="dropdown-user-col">
+                                                    <div class="dropdown-option" data-value="search">search</div>
+                                                    <div class="dropdown-option" data-value="scroll">scroll</div>
+                                                    <div class="dropdown-option" data-value="upload">upload</div>
+                                                    <div class="dropdown-option" data-value="pan">pan</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="eventAction" name="eventAction" required>
+                            </div>
+                            <span class="error" id="eventActionError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventLabel">Event Label *</label>
+                            <input type="text" id="eventLabel" required>
+                            <span class="error" id="eventLabelError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" id="toggleAdditionalContext" class="btn secondary">+ Add Additional Context</button>
+                        </div>
+
+                        <div id="additionalContextContainer" style="display: none;">
+                            <div class="form-group">
+                                <label for="context1">Additional Context 1</label>
+                                <input type="text" id="context1" placeholder="Optional context parameter">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="context2">Additional Context 2</label>
+                                <input type="text" id="context2" placeholder="Optional context parameter">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="context3">Additional Context 3</label>
+                                <input type="text" id="context3" placeholder="Optional context parameter">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn primary">Generate Event</button>
+                    </form>
+                </div>
+
+                <!-- E-commerce Events Form -->
+                <div class="card tab-content" id="ecommerceForm">
+                    <h2>E-commerce Event Details</h2>
+                    <form id="ecommerceEventForm">
+                        <div class="form-group">
+                            <label for="ecomImageUpload">Upload Image (Optional)</label>
+                            <input type="file" id="ecomImageUpload" accept="image/*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ecomEvent">Event Type *</label>
+                            <select id="ecomEvent" required>
+                                <option value="">Select event type</option>
+                                <option value="purchase">purchase</option>
+                                <option value="view_item">view_item</option>
+                                <option value="add_to_cart">add_to_cart</option>
+                                <option value="remove_from_cart">remove_from_cart</option>
+                                <option value="begin_checkout">begin_checkout</option>
+                            </select>
+                            <span class="error" id="ecomEventError"></span>
+                        </div>
+
+                        <h3>Transaction Details</h3>
+                        <div class="form-group">
+                            <label for="transactionId">Transaction ID *</label>
+                            <input type="text" id="transactionId" required placeholder="e.g., T12345">
+                            <span class="error" id="transactionIdError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locationType">Location Type *</label>
+                            <select id="locationType" required>
+                                <option value="">Select location type</option>
+                                <option value="vending">Vending</option>
+                                <option value="brick_and_mortar">Brick and Mortar</option>
+                                <option value="online">Online</option>
+                            </select>
+                            <span class="error" id="locationTypeError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="locationId">Location ID</label>
+                            <input type="text" id="locationId" placeholder="e.g., abcd">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="totalValue">Total Value *</label>
+                            <input type="number" id="totalValue" step="0.01" required placeholder="10.97">
+                            <span class="error" id="totalValueError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tax">Tax</label>
+                            <input type="number" id="tax" step="0.01" placeholder="2.00">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="shipping">Shipping</label>
+                            <input type="number" id="shipping" step="0.01" placeholder="3.99">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="currency">Currency *</label>
+                            <select id="currency" required>
+                                <option value="">Select currency</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="GBP">GBP</option>
+                                <option value="CAD">CAD</option>
+                            </select>
+                            <span class="error" id="currencyError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="coupon">Coupon Code</label>
+                            <input type="text" id="coupon" placeholder="e.g., SUMMER20">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paymentMethod">Payment Method</label>
+                            <input type="text" id="paymentMethod" placeholder="e.g., Credit Card">
+                        </div>
+
+                        <div class="products-section">
+                            <div class="products-header">
+                                <h3>Products</h3>
+                                <button type="button" id="addProductBtn" class="btn secondary">+ Add Product</button>
+                            </div>
+                            <div id="productsContainer">
+                                <!-- Products will be added here dynamically -->
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn primary">Generate E-commerce Event</button>
+                    </form>
+                </div>
+
+                <!-- Data Layer Builder Form -->
+                <div class="card tab-content" id="datalayerForm">
+                    <h2>Event Driven Data Layer Builder</h2>
+                    <form id="dataLayerForm">
+                        <div class="form-group">
+                            <label for="dlImageUpload">Upload Image (Optional)</label>
+                            <input type="file" id="dlImageUpload" accept="image/*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dataLayerName">Data Layer Name *</label>
+                            <select id="dataLayerName" required>
+                                <option value="">Select data layer</option>
+                                <option value="dataLayer">dataLayer (Google Tag Manager)</option>
+                                <option value="adobeDataLayer">adobeDataLayer (Adobe Launch)</option>
+                            </select>
+                            <span class="error" id="dataLayerNameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="eventName">Event Name *</label>
+                            <input type="text" id="eventName" required placeholder="e.g., pageView, addToCart, purchase">
+                            <span class="error" id="eventNameError"></span>
+                        </div>
+
+                        <div class="datalayer-builder">
+                            <div class="builder-header">
+                                <h3>Data Layer Properties</h3>
+                                <button type="button" id="addPropertyBtn" class="btn secondary">+ Add Property</button>
+                            </div>
+                            <div id="propertiesContainer">
+                                <!-- Properties will be added here dynamically -->
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn primary">Generate Data Layer</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <!-- Data Layer Live Preview (only shown for data layer tab) -->
+                <div class="card" id="dataLayerPreview" style="display: none;">
+                    <h2>Live Preview</h2>
+                    <div class="preview-container">
+                        <pre id="livePreviewOutput" class="live-preview">// Add properties to see preview</pre>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="table-header">
+                        <h2>Generated Events</h2>
+                        <div class="table-actions">
+                            <button id="saveProgressButton" class="btn secondary">💾 Save Progress</button>
+                            <button id="loadProgressButton" class="btn secondary">📁 Load Progress</button>
+                            <button id="storageManagementButton" class="btn secondary">🗂️ Storage</button>
+                            <button id="exportButton" class="btn secondary">Export to Excel</button>
+                        </div>
+                    </div>
+                    <div id="activeProjectIndicator" class="active-project-indicator" style="display: none;">
+                        <div class="active-project-info">
+                            <span class="active-project-icon">📝</span>
+                            <div class="active-project-details">
+                                <span class="active-project-label">Working on:</span>
+                                <span id="activeProjectName" class="active-project-name"></span>
+                            </div>
+                        </div>
+                        <div class="active-project-actions">
+                            <span id="autoSaveStatus" class="auto-save-status">Auto-saving...</span>
+                            <button id="stopWorkingButton" class="btn small secondary">Stop Working</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="eventsTable">
+                            <thead>
+                                <tr>
+                                    <th>Experience Image</th>
+                                    <th>Data Layer Specifications</th>
+                                    <th>Tagging Plan</th>
+                                    <th>Options</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close" id="closeSettings">&times;</span>
+        <h2>Settings</h2>
+        <div class="form-group">
+          <label for="screenNamePrefix">Screen Name Prefix</label>
+          <input type="text" id="screenNamePrefix" placeholder="e.g., sac2025_">
+        </div>
+        <div class="modal-actions">
+          <button id="saveSettings" class="btn primary">Save</button>
+          <button id="cancelSettings" class="btn secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save Project Modal -->
+    <div id="saveProjectModal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close" id="closeSaveProject">&times;</span>
+        <h2>💾 Save Project</h2>
+        <div class="form-group">
+          <label for="projectName">Project Name *</label>
+          <input type="text" id="projectName" placeholder="e.g., Summer Campaign 2024" required>
+        </div>
+        <div class="form-group">
+          <label for="projectDescription">Description (Optional)</label>
+          <textarea id="projectDescription" placeholder="Brief description of this project..." rows="3"></textarea>
+        </div>
+        <div class="storage-warning">
+          <p><strong>⚠️ Note:</strong> Projects are saved in your browser's local storage. If you clear browser data for this domain, all saved projects will be lost.</p>
+        </div>
+        <div class="modal-actions">
+          <button id="confirmSaveProject" class="btn primary">Save Project</button>
+          <button id="cancelSaveProject" class="btn secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+         <!-- Load Project Modal -->
+     <div id="loadProjectModal" class="modal" style="display:none;">
+       <div class="modal-content load-modal">
+         <span class="close" id="closeLoadProject">&times;</span>
+         <h2>📁 Load Project</h2>
+         <div id="projectsList" class="projects-list">
+           <!-- Projects will be populated here -->
+         </div>
+         <div class="storage-warning">
+           <p><strong>💡 Tip:</strong> Projects are saved locally in your browser. Make sure to export important work to Excel for backup.</p>
+         </div>
+         <div class="modal-actions">
+           <button id="cancelLoadProject" class="btn secondary">Cancel</button>
+         </div>
+       </div>
+     </div>
+
+     <!-- Storage Management Modal -->
+     <div id="storageManagementModal" class="modal" style="display:none;">
+       <div class="modal-content storage-modal">
+         <span class="close" id="closeStorageManagement">&times;</span>
+         <h2>🗂️ Storage Management</h2>
+         
+         <div class="storage-info">
+           <h3>Storage Usage</h3>
+           <div class="storage-bar-container">
+             <div class="storage-bar">
+               <div id="storageBarFill" class="storage-bar-fill"></div>
+             </div>
+             <div class="storage-stats">
+               <span id="storageUsed">0 KB</span> / <span id="storageTotal">~5 MB</span>
+               (<span id="storagePercent">0%</span> used)
+             </div>
+           </div>
+           <div id="storageWarning" class="storage-alert" style="display: none;">
+             <strong>⚠️ Storage Warning:</strong> <span id="storageWarningText"></span>
+           </div>
+         </div>
+
+         <div class="storage-breakdown">
+           <h3>Breakdown by Project</h3>
+           <div id="projectSizes" class="project-sizes">
+             <!-- Project sizes will be populated here -->
+           </div>
+         </div>
+
+         <div class="storage-actions">
+           <h3>Storage Actions</h3>
+           <div class="action-buttons">
+             <button id="exportAllProjectsButton" class="btn primary">📤 Export All Projects to Excel</button>
+             <button id="clearAllProjectsButton" class="btn danger">🗑️ Clear All Projects</button>
+           </div>
+           <div class="storage-tips">
+             <p><strong>💡 Tips to free up space:</strong></p>
+             <ul>
+               <li>Export projects to Excel and delete unneeded ones</li>
+               <li>Compress images before uploading</li>
+               <li>Remove projects with many large images</li>
+             </ul>
+           </div>
+         </div>
+
+         <div class="modal-actions">
+           <button id="cancelStorageManagement" class="btn secondary">Close</button>
+         </div>
+       </div>
+     </div>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
